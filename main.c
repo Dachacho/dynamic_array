@@ -9,13 +9,14 @@ typedef struct {
 
 Arr arr;
 
-int* add(int num, int *ptr){
+int* add(int num){
 	int *tmp;
 	int new_size = 0;
 	if(arr.idx < arr.size){
 		arr.ptr[arr.idx] = num;
 		arr.idx++;
 	}else{
+		//times it by 2 to avoid 1.5 multiply overhead
 		new_size = arr.size * 2;
 		tmp = realloc(arr.ptr, new_size * sizeof(int));
 		if (!tmp){
@@ -32,10 +33,14 @@ int* add(int num, int *ptr){
 }
 
 int main(){
-	arr.size = 10;
+	arr.size = 8;
 	arr.idx = 0;
 	
-	arr.ptr = (int*) malloc(arr.size * sizeof(int));
+	arr.ptr = malloc(arr.size * sizeof(int));
+	if(arr.ptr == NULL){
+		printf("memory allocation failed\n");
+		return 1;
+	}
 
 	printf("size of array: %d \n", arr.size);
 	if(arr.ptr == NULL){
@@ -47,18 +52,13 @@ int main(){
 		printf("%d ", arr.ptr[k]);
 	}
 
-	for (int i = 0; i < 20; i++){
-		printf("\n");
-		arr.ptr = add(2, arr.ptr);
+	for (int i = 0; i < 2000; i++){
+		arr.ptr = add(2);
 		if(arr.ptr == NULL){
 			printf("add failed\n");
 			return 1;
 		}
-		printf("step:\n");
-		for (int k = 0; k < arr.size; k++){
-			printf("%d ", arr.ptr[k]);
-		}
-	}
+	}	
 	
 	free(arr.ptr);
 	printf("\n");
