@@ -4,80 +4,60 @@
 typedef struct {
 	int idx;
 	int size;
+	int *ptr;
 } Arr;
 
 Arr arr;
 
 int* add(int num, int *ptr){
 	int *tmp;
+	int new_size = 0;
 	if(arr.idx < arr.size){
-		ptr[arr.idx] = num;
+		arr.ptr[arr.idx] = num;
 		arr.idx++;
 	}else{
-		arr.size = arr.size + arr.size;
-		tmp = realloc(ptr, arr.size * sizeof(int));
+		new_size = arr.size * 2;
+		tmp = realloc(arr.ptr, new_size * sizeof(int));
 		if (!tmp){
 			perror("realoc problem");
-			free(tmp);
-			return 1;
+			return NULL;
 		}
 
-		ptr = tmp;
+		arr.ptr = tmp;
+		arr.size = new_size;
+		arr.ptr[arr.idx] = num;
+		arr.idx++;
 	}
-	return ptr;
+	return arr.ptr;
 }
 
 int main(){
 	arr.size = 10;
-	int *ptr;
 	arr.idx = 0;
 	
-	ptr = (int*) malloc(arr.size * sizeof(int));
+	arr.ptr = (int*) malloc(arr.size * sizeof(int));
 
-	printf("size of array %d: \n", arr.size);
-	if(ptr == NULL){
+	printf("size of array: %d \n", arr.size);
+	if(arr.ptr == NULL){
 		printf("memory not allocated\n");
 		return 0;
 	}
-	for (int k = 0; k < arr.size; k++){
-		printf("%d ", ptr[k]);
-	}
-
-	printf("\n");
-
-	ptr = add(2, ptr);
-	printf("after insertion:\n");
-	for (int k = 0; k < arr.size; k++){
-		printf("%d ", ptr[k]);
-	}
-	printf("\n");
 	
-	ptr = add(2, ptr);
-	printf("after insertion:\n");
 	for (int k = 0; k < arr.size; k++){
-		printf("%d ", ptr[k]);
+		printf("%d ", arr.ptr[k]);
 	}
 
-	printf("\n");
-
-	ptr = add(2, ptr);
-	ptr = add(2, ptr);
-	ptr = add(2, ptr);
-	ptr = add(2, ptr);
-	ptr = add(2, ptr);
-	ptr = add(2, ptr);
-	ptr = add(2, ptr);
-	ptr = add(2, ptr);
-	ptr = add(2, ptr);
-	ptr = add(2, ptr);
-	ptr = add(2, ptr);
-	ptr = add(2, ptr);
-
-	printf("after insertion:\n");
-	for (int k = 0; k < arr.size; k++){
-		printf("%d ", ptr[k]);
+	for (int i = 0; i < 20; i++){
+		printf("\n");
+		arr.ptr = add(2, arr.ptr);
+		printf("step:\n");
+		for (int k = 0; k < arr.size; k++){
+			printf("%d ", arr.ptr[k]);
+		}
+		printf("\n");
 	}
-	free(ptr);
+	
+	free(arr.ptr);
 
-	printf("size of array %d: \n", arr.size);
+	printf("size of array: %d \n", arr.size);
 }
