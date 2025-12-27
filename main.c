@@ -50,14 +50,17 @@ int main(){
 	for (int i = 0; i < 20; i++){
 		printf("\n");
 		arr.ptr = add(2, arr.ptr);
+		if(arr.ptr == NULL){
+			printf("add failed\n");
+			return 1;
+		}
 		printf("step:\n");
 		for (int k = 0; k < arr.size; k++){
 			printf("%d ", arr.ptr[k]);
 		}
-		printf("\n");
 	}
 	
 	free(arr.ptr);
-
+	printf("\n");
 	printf("size of array: %d \n", arr.size);
 }
