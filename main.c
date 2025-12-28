@@ -9,7 +9,7 @@ typedef struct {
 
 Arr arr;
 
-int* add_to_arr(int num){
+int* push(int num){
 	int *tmp;
 	int new_size = 0;
 	if(arr.idx < arr.size){
@@ -32,7 +32,7 @@ int* add_to_arr(int num){
 	return arr.ptr;
 }
 
-int* remove_from_arr(){
+int* pop(){
 	int *tmp;
 	int new_size = 0;
 
@@ -50,6 +50,36 @@ int* remove_from_arr(){
 	}else{
 		arr.ptr[arr.idx] = 0;
 		arr.idx--;
+	}
+
+	return arr.ptr;
+}
+
+int* remove_at(int index){
+	int i = 0;
+	int *tmp;
+	int new_size = 0;
+
+	if(index < 0 || index >= arr.idx){
+		perror("can't index out of range");
+		return NULL;
+	}
+	
+	for (i = index; i < arr.idx; i++){
+		arr.ptr[i] = arr.ptr[i + 1];
+	}
+
+	arr.idx--;
+
+	if(arr.idx * 2 < arr.size && arr.size > 8){
+		new_size = arr.size / 2;
+		tmp = realloc(arr.ptr, new_size * sizeof(int));
+		if(!tmp){
+			fprintf(stderr, "realoc problem");
+			return NULL;
+		}
+		arr.ptr = tmp;
+		arr.size = new_size;
 	}
 
 	return arr.ptr;
@@ -77,7 +107,7 @@ int main(){
 
 	printf("\n");
 	for (int i = 0; i < 100; i++){
-		arr.ptr = add_to_arr(2);
+		arr.ptr = push(2);
 		if(arr.ptr == NULL){
 			printf("add failed\n");
 			return 1;
@@ -90,7 +120,7 @@ int main(){
 	}
 
 	for (int i = 0; i < 75; i++){
-		arr.ptr = remove_from_arr();
+		arr.ptr = remove_at(1);
 		if(arr.ptr == NULL){
 			printf("add failed\n");
 			return 1;
