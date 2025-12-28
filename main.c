@@ -44,7 +44,6 @@ int* pop(){
 			return NULL;
 		}
 		arr.ptr = tmp;
-		arr.ptr[arr.idx] = 0;
 		arr.size = new_size;
 		arr.idx--;
 	}else{
@@ -65,7 +64,7 @@ int* remove_at(int index){
 		return NULL;
 	}
 	
-	for (i = index; i < arr.idx; i++){
+	for (i = index; i < arr.idx - 1; i++){
 		arr.ptr[i] = arr.ptr[i + 1];
 	}
 
@@ -83,6 +82,35 @@ int* remove_at(int index){
 	}
 
 	return arr.ptr;
+}
+
+int get(int index){
+	if(index < 0 || index >= arr.idx){
+		fprintf(stderr, "index out of range\n");
+		return -1;
+	}
+
+	return arr.ptr[index]; 
+}
+
+void set(int index, int value){
+	if(index < 0 || index >= arr.idx){
+		fprintf(stderr, "index out of range\n");
+		return;
+	}
+	arr.ptr[index] = value;
+}
+
+int index_of(int value){
+	int i = 0;
+	
+	for (i = 0; i < arr.idx; i++){
+		if(arr.ptr[i] == value){
+			return i;
+		}
+	}
+
+	return -1;
 }
 
 int main(){
